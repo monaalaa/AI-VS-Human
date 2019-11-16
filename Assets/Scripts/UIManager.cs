@@ -8,9 +8,11 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance;
     public Animator PanelActionAnimator;
     public Text Message;
+
+    public GameObject ActionPanel;
+
     private string textToNotify;
 
-    public bool Hidden;
     internal string TextToNotify
     {
         get => textToNotify;
@@ -25,6 +27,7 @@ public class UIManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
+        UnitsManager.ReadyToAction += EnableActionPanel;
     }
     void ShowPanel()
     {
@@ -39,5 +42,15 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSeconds(2f);
             PanelActionAnimator.SetTrigger("HidePanel");
         }
+    }
+
+    void EnableActionPanel()
+    {
+        ActionPanel.SetActive(true);
+    }
+
+    public void OnClickSkip()
+    {
+        UnitsManager.Instance.TurnBase();
     }
 }

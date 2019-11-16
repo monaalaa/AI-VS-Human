@@ -30,7 +30,7 @@ public class Units : MonoBehaviour
 
     public void Start()
     {
-        PlayerHealth.text = "Helth " + health.ToString();
+        PlayerHealth.text = "Health " + health.ToString();
     }
 
     public virtual void Attack(Units unitToAttack) 

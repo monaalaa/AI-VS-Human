@@ -7,7 +7,7 @@ using UnityEngine;
 public class UnitsManager : MonoBehaviour
 {
     public static UnitsManager Instance;
-    public static Action ReachDistination;
+    public static Action ReadyToAction;
 
     [HideInInspector]
     public Units Selectedplayer;
@@ -73,16 +73,7 @@ public class UnitsManager : MonoBehaviour
         Selectedplayer.SelectedFlag.SetActive(false);
     }
 
-    public void InvokeReachDistination()
-    {
-        if (ReachDistination != null)
-        {
-            ReachDistination.Invoke();
-        }
-        SearchForPirates();
-    }
-
-    public void SearchForPirates()
+    public bool SearchForPirates()
     {
         Collider[] colliders;
         colliders = Physics.OverlapSphere(Selectedplayer.transform.position, Selectedplayer.AttackRange, 1);
@@ -91,8 +82,31 @@ public class UnitsManager : MonoBehaviour
             piratesInRange.Add(colliders[i].gameObject.GetComponent<PiratesUnits>());
             piratesInRange[i].ShowAttackFlag();
         }
+
+        if (piratesInRange.Count > 0)
+        {
+            return true;
+        }
+
+        return false;
     }
 
+    public void PlayerReachedDistnation()
+    {
+        if (SearchForPirates())
+        {
+           InvokeReadyToAction();
+        }
+        else
+          TurnBase();
+    }
+    public void InvokeReadyToAction()
+    {
+        if (ReadyToAction != null)
+        {
+            ReadyToAction.Invoke();
+        }
+    }
     public void HideFlags()
     {
         for (int i = 0; i < piratesInRange.Count; i++)
@@ -102,5 +116,6 @@ public class UnitsManager : MonoBehaviour
         piratesInRange.Clear();
     }
 
-    
+
+
 }

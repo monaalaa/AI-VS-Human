@@ -53,7 +53,8 @@ public class PlayerUnits : Units
             if (distance <= 1.1f)
             {
                 moveToDistination = false;
-                UnitsManager.Instance.InvokeReachDistination();
+
+                UnitsManager.Instance.PlayerReachedDistnation();
             }
         }
     }

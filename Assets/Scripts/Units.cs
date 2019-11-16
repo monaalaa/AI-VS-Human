@@ -10,38 +10,38 @@ public class Units : MonoBehaviour
     public float Steps;
 
     public GameObject SelectedFlag;
-    public Text PlayerHelth;
+    public Text PlayerHealth;
 
     [SerializeField]
-    private int helth;
+    private int health;
 
-    public int Helth
+    public int Health
     {
-        get => helth;
+        get => health;
 
         set
         {
-            helth = value;
-            if (helth > 0)
-                PlayerHelth.text = "Helth " + helth.ToString();
-            CheckIfItDisdroied();
+            health = value;
+            if (health > 0)
+                PlayerHealth.text = "Helth " + health.ToString();
+            CheckIfItDestroyed();
         }
     }
 
     public void Start()
     {
-        PlayerHelth.text = "Helth " + helth.ToString();
+        PlayerHealth.text = "Helth " + health.ToString();
     }
 
     public virtual void Attack(Units unitToAttack) 
     {
         //Reduce enemy Helth
-        unitToAttack.Helth -= AttackPower;
+        unitToAttack.Health -= AttackPower;
     }
 
-    void CheckIfItDisdroied()
+    void CheckIfItDestroyed()
     {
-        if (helth <= 0)
+        if (health <= 0)
         {
             //Show Destroy Particle
             RemoveFromList(this);
@@ -49,14 +49,6 @@ public class Units : MonoBehaviour
         }
     }
 
-    public virtual void RemoveFromList(Units destoiedUnit) { }
+    public virtual void RemoveFromList(Units destroyedUnit) { }
 
-    public void OnUnitSelected()
-    {
-        SelectedFlag.SetActive(true);   
-    }
-    public void UnSelectUnit()
-    {
-        SelectedFlag.SetActive(false);
-    }
 }

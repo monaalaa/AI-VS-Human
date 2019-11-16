@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class PiratesUnits : Units
 {
+    public GameObject AttackFlag;
+
     // Start is called before the first frame update
     new void Start()
     {
         base.Start();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public void ShowAttackFlag()
+    { AttackFlag.SetActive(true); }
+    public void HideAttackFlag()
+    { AttackFlag.SetActive(false); }
 }

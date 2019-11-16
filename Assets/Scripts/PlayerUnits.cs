@@ -7,7 +7,6 @@ public class PlayerUnits : Units
 {
     public LayerMask MovmentMask;
 
-    bool canAttack = false;
     bool moveToDistination = false;
 
     PiratesUnits pirate;
@@ -29,63 +28,58 @@ public class PlayerUnits : Units
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
            
-            //Player JustMove
             if (Physics.Raycast(ray, out hit))
             {
-                Debug.Log(hit.collider.gameObject.name);
-                if (hit.collider.gameObject.layer == Mathf.Log(MovmentMask.value, 2))
+                //Click Ground To Move
+                if (hit.collider.gameObject.layer == Mathf.Log(MovmentMask.value, 2)) 
                 {
-                   // agent.stoppingDistance = AttackRange;
-                   
-                    destination = hit.point;
-                    if (Vector3.Distance(destination, transform.position) < Steps)
-                    {
-                        agent.SetDestination(destination);
-
-                        UIManager.Instance.TextToNotify = name + " Moves To New Location";
-                        moveToDistination = true;
-                    }
+                    Move(hit);
                 }
-                else 
+
+                else //ForAttack
                 {
                     pirate = hit.collider.gameObject.GetComponent<PiratesUnits>();
                     if (pirate != null)
                     {
-                        destination = pirate.transform.position;
-                        agent.SetDestination(destination);
-                        canAttack = true;
-                        UIManager.Instance.TextToNotify = name + " Is Attacking Pirate " + pirate.name;
-                        moveToDistination = true;
+                        Attack(pirate);
                     }
                 }
-
-               
             }
         }
 
         if (moveToDistination)
         {
             float distance = Vector3.Distance(transform.position, destination);
-            Debug.Log(distance);
             if (distance <= 1.1f)
             {
-                //if (canAttack)
-                //{
-                //    Attack(pirate);
-                //}
                 moveToDistination = false;
-                UnSelectUnit();
-                UnitsManager.Instance.TurnBase();
-
+                UnitsManager.Instance.InvokeReachDistination();
             }
+        }
+    }
+
+    private void Move(RaycastHit hit)
+    {
+        destination = hit.point;
+        if (Vector3.Distance(destination, transform.position) < Steps)
+        {
+            agent.SetDestination(destination);
+
+            UIManager.Instance.TextToNotify = name + " Moves To New Location";
+            moveToDistination = true;
         }
     }
 
     public override void Attack(Units unitToAttack)
     {
-        base.Attack(unitToAttack);
-        pirate = null;
-        canAttack = false;
+        destination = unitToAttack.transform.position;
+        if (Vector3.Distance(destination, transform.position) < AttackRange)
+        {
+            base.Attack(unitToAttack);
+            UIManager.Instance.TextToNotify = name + " Is Attacking Pirate " + pirate.name;
+            UnitsManager.Instance.TurnBase();
+            pirate = null;
+        }
     }
 
     public override void RemoveFromList(Units destroiedUnit)

@@ -6,11 +6,13 @@ public class EnviromentGenerator : MonoBehaviour
 {
     public GameObject Player;
     public GameObject Pairets;
+
     public Transform PlayersParent;
     public Transform PairetsParent;
 
     public int X_Range;
     public int Z_Range;
+
     int numberOFPlayers;
     int numberOFPairets;
 
@@ -46,6 +48,7 @@ public class EnviromentGenerator : MonoBehaviour
         {
             GameObject tempObj = InstantiateUnit(i,PlayersParent,Player);
             UnitsManager.Instance.Players.Add(tempObj.GetComponent<PlayerUnits>());
+            
         }
 
         for (int i = 0; i < numberOFPairets; i++)
@@ -55,13 +58,21 @@ public class EnviromentGenerator : MonoBehaviour
         }
     }
 
-    private GameObject InstantiateUnit(int i,Transform parent,GameObject type)
+    private GameObject InstantiateUnit(int i, Transform parent, GameObject type)
     {
         int index = Random.Range(0, positionsList.Count - 1);
+
         Vector3 temPos = new Vector3(positionsList[index].XValue, 0, positionsList[index].ZValue);
+
         GameObject tempObj = GameObject.Instantiate(type, temPos, new Quaternion());
-        tempObj.name = "Player " + i.ToString();
+
+        if (type.GetComponent<PlayerUnits>() != null)
+            tempObj.name = "Player " + i.ToString();
+        else
+            tempObj.name = "Pirate " + i.ToString();
+
         tempObj.transform.parent = parent;
+        positionsList.RemoveAt(index);
         return tempObj;
     }
 }

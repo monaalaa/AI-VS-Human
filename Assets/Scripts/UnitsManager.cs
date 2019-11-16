@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UnityEngine;
 public class UnitsManager : MonoBehaviour
 {
     public static UnitsManager Instance;
+    public static Action ReachDistination;
 
     [HideInInspector]
     public Units Selectedplayer;
@@ -16,6 +18,7 @@ public class UnitsManager : MonoBehaviour
     int CurrentUnitIndex = 0;
     bool playerTurn = true;
 
+    List<PiratesUnits> piratesInRange = new List<PiratesUnits>();
     private void Awake()
     {
         if (Instance == null)
@@ -30,6 +33,9 @@ public class UnitsManager : MonoBehaviour
 
    public void TurnBase()
     {
+        if(Selectedplayer != null)
+        UnSelectUnit();
+
         if (playerTurn)
         {
             GoToNextUnit(Players.Count, Players.Cast<Units>().ToList(), false);
@@ -37,15 +43,16 @@ public class UnitsManager : MonoBehaviour
         else
         {
             GoToNextUnit(Pirates.Count, Pirates.Cast<Units>().ToList(), true);
-
         }
+
+        HideFlags();
     }
     private void GoToNextUnit(int count,List<Units> units, bool isPlayerTurn)
     {
         if (CurrentUnitIndex < count)
         {
             Selectedplayer = units[CurrentUnitIndex];
-            units[CurrentUnitIndex].OnUnitSelected();
+            OnUnitSelected();
             CurrentUnitIndex++;
         }
         else
@@ -57,4 +64,43 @@ public class UnitsManager : MonoBehaviour
 
 
     }
+    public void OnUnitSelected()
+    {
+        Selectedplayer.SelectedFlag.SetActive(true);
+    }
+    public void UnSelectUnit()
+    {
+        Selectedplayer.SelectedFlag.SetActive(false);
+    }
+
+    public void InvokeReachDistination()
+    {
+        if (ReachDistination != null)
+        {
+            ReachDistination.Invoke();
+        }
+        SearchForPirates();
+    }
+
+    public void SearchForPirates()
+    {
+        Collider[] colliders;
+        colliders = Physics.OverlapSphere(Selectedplayer.transform.position, Selectedplayer.AttackRange, 1);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            piratesInRange.Add(colliders[i].gameObject.GetComponent<PiratesUnits>());
+            piratesInRange[i].ShowAttackFlag();
+        }
+    }
+
+    public void HideFlags()
+    {
+        for (int i = 0; i < piratesInRange.Count; i++)
+        {
+            piratesInRange[i].HideAttackFlag();
+        }
+        piratesInRange.Clear();
+    }
+
+    
 }

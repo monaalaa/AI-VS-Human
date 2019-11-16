@@ -35,13 +35,16 @@ public class PlayerUnits : Units
                 Debug.Log(hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == Mathf.Log(MovmentMask.value, 2))
                 {
-                    agent.stoppingDistance = AttackRange;
+                   // agent.stoppingDistance = AttackRange;
                    
                     destination = hit.point;
+                    if (Vector3.Distance(destination, transform.position) < Steps)
+                    {
+                        agent.SetDestination(destination);
 
-                    agent.SetDestination(destination);
-
-                    UIManager.Instance.TextToNotify =name+ " Moves To New Location";
+                        UIManager.Instance.TextToNotify = name + " Moves To New Location";
+                        moveToDistination = true;
+                    }
                 }
                 else 
                 {
@@ -52,26 +55,28 @@ public class PlayerUnits : Units
                         agent.SetDestination(destination);
                         canAttack = true;
                         UIManager.Instance.TextToNotify = name + " Is Attacking Pirate " + pirate.name;
+                        moveToDistination = true;
                     }
                 }
-                moveToDistination = true;
 
+               
             }
         }
 
         if (moveToDistination)
         {
             float distance = Vector3.Distance(transform.position, destination);
-            if (distance <= AttackRange)
+            Debug.Log(distance);
+            if (distance <= 1.1f)
             {
-                if (canAttack)
-                {
-                    Attack(pirate);
-                }
+                //if (canAttack)
+                //{
+                //    Attack(pirate);
+                //}
                 moveToDistination = false;
                 UnSelectUnit();
                 UnitsManager.Instance.TurnBase();
-               
+
             }
         }
     }

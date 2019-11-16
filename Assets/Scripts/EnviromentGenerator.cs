@@ -16,7 +16,7 @@ public class EnviromentGenerator : MonoBehaviour
 
     List<Positions> positionsList = new List<Positions>();
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         PrepareGeneration();
         GeneratePositions();

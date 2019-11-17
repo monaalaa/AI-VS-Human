@@ -406,7 +406,7 @@ MonoBehaviour:
   Steps: 0
   HealthBar: {fileID: 7584048657814805059}
   SelectedFlag: {fileID: 3372190729459058507}
-  health: 2
+  health: 1
   DethSprite: {fileID: -6632341581616284277, guid: ad4f6d6ac5dcdea4daa47fe57beff4ed,
     type: 3}
   AttackFlag: {fileID: 3372190729451106685}

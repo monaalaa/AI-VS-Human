@@ -36,6 +36,12 @@ public class Units : MonoBehaviour
         }
     }
 
+    public void Start()
+    {
+        initialHealth = Health;
+        HealthBar.fillAmount = 1;
+        agent = GetComponent<NavMeshAgent>();
+    }
     private void UpdateUnitHealth()
     {
         if (health > 0)
@@ -47,14 +53,6 @@ public class Units : MonoBehaviour
             }
         }
     }
-
-    public void Start()
-    {
-        initialHealth = Health;
-        HealthBar.fillAmount = 1;
-        agent = GetComponent<NavMeshAgent>();
-    }
-
     public virtual void Move(Vector3 location)
     {
         destination = location;
@@ -70,18 +68,16 @@ public class Units : MonoBehaviour
     {
         //Reduce enemy Helth
         unitToAttack.Health -= AttackPower;
+        UnitsManager.Instance.InvokeUnitAttack(this, unitToAttack);
     }
-
     void CheckIfItDestroyed()
     {
         if (health <= 0)
         {
-            //Show Destroy Particle
+            UnitsManager.Instance.InvokeUnitDestroied(this);
             RemoveFromList(this);
-            Destroy(gameObject);
         }
     }
-
     public virtual void RemoveFromList(Units destroyedUnit) { }
 
 }

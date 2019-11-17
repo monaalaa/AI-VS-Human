@@ -7,7 +7,10 @@ using UnityEngine;
 public class UnitsManager : MonoBehaviour
 {
     public static UnitsManager Instance;
-    public static Action ReadyToAction;
+    public static Action ReadyToMakeAction;
+    public static Action<Units, Units> UnitAttack;
+    public static Action<Units> UnitDetroyed;
+
 
     [HideInInspector]
     public Units Selectedplayer;
@@ -104,13 +107,7 @@ public class UnitsManager : MonoBehaviour
         else
             TurnBase();
     }
-    public void InvokeReadyToAction()
-    {
-        if (ReadyToAction != null)
-        {
-            ReadyToAction.Invoke();
-        }
-    }
+
     public void HideFlags()
     {
         for (int i = 0; i < piratesInRange.Count; i++)
@@ -118,5 +115,24 @@ public class UnitsManager : MonoBehaviour
             piratesInRange[i].HideAttackFlag();
         }
         piratesInRange.Clear();
+    }
+
+    public void InvokeReadyToAction()
+    {
+        if (ReadyToMakeAction != null)
+        {
+            ReadyToMakeAction.Invoke();
+        }
+    }
+    public void InvokeUnitDestroied(Units unit)
+    {
+        if (UnitDetroyed != null)
+            UnitDetroyed.Invoke(unit);
+        Destroy(unit.gameObject);
+    }
+    public void InvokeUnitAttack(Units arg1,Units arg2)
+    {
+        if (UnitAttack != null)
+            UnitAttack.Invoke(arg1,arg2);
     }
 }

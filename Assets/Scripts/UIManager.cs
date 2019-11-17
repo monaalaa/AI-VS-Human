@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,8 +28,9 @@ public class UIManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
-        UnitsManager.ReadyToAction += EnableActionPanel;
+        UnitsManager.ReadyToMakeAction += EnableActionPanel;
     }
+
     void ShowPanel()
     {
         Message.text = TextToNotify;

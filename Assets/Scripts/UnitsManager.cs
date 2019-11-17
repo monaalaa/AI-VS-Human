@@ -19,22 +19,20 @@ public class UnitsManager : MonoBehaviour
     bool playerTurn = true;
 
     List<PiratesUnits> piratesInRange = new List<PiratesUnits>();
+
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
     }
-
-    // Start is called before the first frame update
     void Start()
     {
         TurnBase();
     }
-
-   public void TurnBase()
+    public void TurnBase()
     {
-        if(Selectedplayer != null)
-        UnSelectUnit();
+        if (Selectedplayer != null)
+            UnSelectUnit();
 
         if (playerTurn)
         {
@@ -48,7 +46,7 @@ public class UnitsManager : MonoBehaviour
         HideFlags();
         UIManager.Instance.DisableActionPanel();
     }
-    private void GoToNextUnit(int count,List<Units> units, bool isPlayerTurn)
+    private void GoToNextUnit(int count, List<Units> units, bool isPlayerTurn)
     {
         if (CurrentUnitIndex < count)
         {
@@ -79,7 +77,6 @@ public class UnitsManager : MonoBehaviour
         if (temp != null)
             temp.Range.SetActive(false);
     }
-
     public bool SearchForPirates()
     {
         Collider[] colliders;
@@ -97,15 +94,15 @@ public class UnitsManager : MonoBehaviour
 
         return false;
     }
-
-    public void PlayerReachedDistnation()
+    //Note: De mesh elmfrod tkon hena 3lshan hya 7aga khasa b elplayer bs lkn el pirate mesh by3ml keda
+    public void WhenPlayerReachedDistnation()
     {
         if (SearchForPirates())
         {
-           InvokeReadyToAction();
+            InvokeReadyToAction();
         }
         else
-          TurnBase();
+            TurnBase();
     }
     public void InvokeReadyToAction()
     {
@@ -122,7 +119,4 @@ public class UnitsManager : MonoBehaviour
         }
         piratesInRange.Clear();
     }
-
-
-
 }

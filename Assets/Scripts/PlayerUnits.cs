@@ -7,18 +7,12 @@ public class PlayerUnits : Units
 {
     public LayerMask MovmentMask;
     public GameObject Range;
-    bool moveToDistination = false;
 
     PiratesUnits pirate;
-    Vector3 destination;
-
-    NavMeshAgent agent;
     new void Start()
     {
-        base.Start();
-        agent = GetComponent<NavMeshAgent>();
+        base.Start(); 
     }
-
 
     // Update is called once per frame
     void Update()
@@ -33,7 +27,7 @@ public class PlayerUnits : Units
                 //Click Ground To Move
                 if (hit.collider.gameObject.layer == Mathf.Log(MovmentMask.value, 2)) 
                 {
-                    Move(hit);
+                    Move(hit.point);
                 }
 
                 else //ForAttack
@@ -54,20 +48,8 @@ public class PlayerUnits : Units
             {
                 moveToDistination = false;
 
-                UnitsManager.Instance.PlayerReachedDistnation();
+                UnitsManager.Instance.WhenPlayerReachedDistnation();
             }
-        }
-    }
-
-    private void Move(RaycastHit hit)
-    {
-        destination = hit.point;
-        if (Vector3.Distance(destination, transform.position) < Steps)
-        {
-            agent.SetDestination(destination);
-
-            UIManager.Instance.TextToNotify = name + " Moves To New Location";
-            moveToDistination = true;
         }
     }
 

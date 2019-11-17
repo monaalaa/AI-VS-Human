@@ -46,6 +46,7 @@ public class UnitsManager : MonoBehaviour
         }
 
         HideFlags();
+        UIManager.Instance.DisableActionPanel();
     }
     private void GoToNextUnit(int count,List<Units> units, bool isPlayerTurn)
     {
@@ -67,10 +68,16 @@ public class UnitsManager : MonoBehaviour
     public void OnUnitSelected()
     {
         Selectedplayer.SelectedFlag.SetActive(true);
+        PlayerUnits temp = Selectedplayer.GetComponent<PlayerUnits>();
+        if (temp != null)
+            temp.Range.SetActive(true);
     }
     public void UnSelectUnit()
     {
         Selectedplayer.SelectedFlag.SetActive(false);
+        PlayerUnits temp = Selectedplayer.GetComponent<PlayerUnits>();
+        if (temp != null)
+            temp.Range.SetActive(false);
     }
 
     public bool SearchForPirates()

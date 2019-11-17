@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class PlayerUnits : Units
 {
     public LayerMask MovmentMask;
-
+    public GameObject Range;
     bool moveToDistination = false;
 
     PiratesUnits pirate;

@@ -49,6 +49,11 @@ public class UIManager : MonoBehaviour
         ActionPanel.SetActive(true);
     }
 
+   public void DisableActionPanel()
+    {
+        ActionPanel.SetActive(false);
+    }
+
     public void OnClickSkip()
     {
         UnitsManager.Instance.TurnBase();

@@ -9,6 +9,7 @@ public class PlayerUnits : Units
     public GameObject Range;
 
     PiratesUnits pirate;
+    internal bool canMove = false;
     new void Start()
     {
         base.Start(); 
@@ -25,7 +26,7 @@ public class PlayerUnits : Units
             if (Physics.Raycast(ray, out hit))
             {
                 //Click Ground To Move
-                if (hit.collider.gameObject.layer == Mathf.Log(MovmentMask.value, 2)) 
+                if (hit.collider.gameObject.layer == Mathf.Log(MovmentMask.value, 2) && canMove)
                 {
                     Move(hit.point);
                 }
@@ -47,7 +48,7 @@ public class PlayerUnits : Units
             if (distance <= 1.1f)
             {
                 moveToDistination = false;
-
+                canMove = false;
                 UnitsManager.Instance.WhenPlayerReachedDistnation();
             }
         }
@@ -56,7 +57,8 @@ public class PlayerUnits : Units
     public override void Attack(Units unitToAttack)
     {
         destination = unitToAttack.transform.position;
-        if (Vector3.Distance(destination, transform.position) < AttackRange)
+        int x = (int)Vector3.Distance(destination, transform.position);
+        if (x < AttackRange)
         {
             base.Attack(unitToAttack);
             UIManager.Instance.TextToNotify = name + " Is Attacking Pirate " + pirate.name;
@@ -69,4 +71,5 @@ public class PlayerUnits : Units
     {
         UnitsManager.Instance.Players.Remove(destroiedUnit as PlayerUnits);
     }
+
 }

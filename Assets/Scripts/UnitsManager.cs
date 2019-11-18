@@ -8,6 +8,7 @@ public class UnitsManager : MonoBehaviour
 {
     public static UnitsManager Instance;
     public static Action ReadyToMakeAction;
+    public static Action UnitSelected;
     public static Action<Units, Units> UnitAttack;
     public static Action<Units> UnitDetroyed;
 
@@ -40,6 +41,8 @@ public class UnitsManager : MonoBehaviour
         if (playerTurn)
         {
             GoToNextUnit(Players.Count, Players.Cast<Units>().ToList(), false);
+            if(Selectedplayer.GetComponent<PlayerUnits>()!=null)
+            Selectedplayer.GetComponent<PlayerUnits>().canMove = true;
         }
         else
         {
@@ -56,6 +59,8 @@ public class UnitsManager : MonoBehaviour
             Selectedplayer = units[CurrentUnitIndex];
             OnUnitSelected();
             CurrentUnitIndex++;
+            if (UnitSelected != null)
+                UnitSelected.Invoke();
         }
         else
         {

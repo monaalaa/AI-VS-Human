@@ -57,19 +57,12 @@ public class PlayerUnits : Units
     public override void Attack(Units unitToAttack)
     {
         destination = unitToAttack.transform.position;
-        int x = (int)Vector3.Distance(destination, transform.position);
-        if (x < AttackRange)
+        int dis = (int)Vector3.Distance(destination, transform.position);
+        if (dis <= AttackRange)
         {
             base.Attack(unitToAttack);
-            UIManager.Instance.TextToNotify = name + " Is Attacking Pirate " + pirate.name;
             UnitsManager.Instance.TurnBase();
             pirate = null;
         }
     }
-
-    public override void RemoveFromList(Units destroiedUnit)
-    {
-        UnitsManager.Instance.Players.Remove(destroiedUnit as PlayerUnits);
-    }
-
 }

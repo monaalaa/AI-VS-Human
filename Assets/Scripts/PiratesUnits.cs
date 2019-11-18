@@ -46,17 +46,19 @@ public class PiratesUnits : Units
                 PlayerUnits weakestPlayer = SearchForWeakestEnemy(ref playersInRangePower);
 
                 //Check if am safe (get the weakest and attack ) else ( runaway )
-                if (playersInRangePower < Health)
+                if (playersInRangePower < Health || weakestPlayer.Health <= AttackPower)
                 {
+                    Debug.Log(weakestPlayer.name + "Weakest Player");
                     destination = weakestPlayer.transform.position;
                     Vector3 dir = GetDirection(destination);
-                    agent.SetDestination(transform.position + 3 * dir);
-                    moveToDistination = true;
+                    Move(transform.position + 3 * dir);
                     canAttack = true;
                     attackUnit = weakestPlayer;
+                    Debug.Log("weakestPlayer");
                 }
                 else
                 {
+                    Debug.Log("Run Away");
                     //runaway
                 }
             }
@@ -64,6 +66,8 @@ public class PiratesUnits : Units
             {
                 //else => get all players and search for the nearst and go in it's direction
                 SearchForNearstEnemyOutOfAttackRange();
+                Debug.Log("SearchForNearstEnemyOutOfAttackRange");
+
             }
         }
     }
@@ -73,6 +77,7 @@ public class PiratesUnits : Units
     { AttackFlag.SetActive(false); }
     bool SearchForEnemiesInAttackRange()
     {
+        playersInRange.Clear();
         Units temp = UnitsManager.Instance.Selectedplayer;
         Collider[] colliders;
         colliders = Physics.OverlapSphere(temp.transform.position, temp.AttackRange, 1 << 8);
@@ -103,26 +108,22 @@ public class PiratesUnits : Units
 
         for (int i = 0; i < UnitsManager.Instance.Players.Count; i++)
         {
-             tempPos = UnitsManager.Instance.Players[i].transform.position;
+            tempPos = UnitsManager.Instance.Players[i].transform.position;
 
             //Search fo find nearst one and set it as target
             if (Vector3.Distance(transform.position, tempPos) < distance)
             {
                 distance = Vector3.Distance(tempPos, transform.position);
                 targetPos = tempPos;
-            } 
+            }
         }
         destination = targetPos;
         Vector3 dir = GetDirection(targetPos) * Steps;
         destination = dir + transform.position;
         agent.SetDestination(destination);
-
         isMoving = true;
+        UnitsManager.Instance.InvokeActionHappned(name + " Moves To New Location");
         moveToDistination = true;
-    }
-    public override void RemoveFromList(Units destroiedUnit)
-    {
-        UnitsManager.Instance.Pirates.Remove(destroiedUnit as PiratesUnits);
     }
     private PlayerUnits SearchForWeakestEnemy(ref int playersInRangePower)
     {

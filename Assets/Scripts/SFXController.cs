@@ -11,13 +11,12 @@ public class SFXController : MonoBehaviour
     AudioClip DethSound;
     [SerializeField]
     AudioSource audioSource;
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
         UnitsManager.UnitDetroyed += ShowDestroyParticle;
         UnitsManager.UnitAttack += ShowUnitAttackParticle;
     }
-
     private void ShowUnitAttackParticle(Units a, Units b)
     {
         audioSource.clip = AttackSound;
@@ -27,5 +26,10 @@ public class SFXController : MonoBehaviour
     {
         audioSource.clip = DethSound;
         audioSource.Play();
+    }
+    private void OnDestroy()
+    {
+        UnitsManager.UnitDetroyed -= ShowDestroyParticle;
+        UnitsManager.UnitAttack -= ShowUnitAttackParticle;
     }
 }

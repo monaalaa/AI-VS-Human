@@ -407,6 +407,7 @@ MonoBehaviour:
   Steps: 5
   HealthBar: {fileID: 7584048657814805059}
   SelectedFlag: {fileID: 3372190729459058507}
+  type: 0
   health: 3
   DethSprite: {fileID: -6632341581616284277, guid: ad4f6d6ac5dcdea4daa47fe57beff4ed,
     type: 3}
@@ -425,7 +426,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0.5
+  m_StoppingDistance: 0.8
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

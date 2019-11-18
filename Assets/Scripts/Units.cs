@@ -4,16 +4,23 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
+public enum UnitType
+{
+    Pirate,
+    Player
+}
+
 public class Units : MonoBehaviour
 {
 	public int AttackPower;
     public int AttackRange;
     public float Steps;
+
     [SerializeField]
     Image HealthBar;
 
     public GameObject SelectedFlag;
-
+    public UnitType type;
     protected NavMeshAgent agent;
 
     protected Vector3 destination;
@@ -59,8 +66,7 @@ public class Units : MonoBehaviour
         if (Vector3.Distance(destination, transform.position) < Steps)
         {
             agent.SetDestination(destination);
-
-            UIManager.Instance.TextToNotify = name + " Moves To New Location";
+            UnitsManager.Instance.InvokeActionHappned(name + " Moves To New Location");
             moveToDistination = true;
         }
     }
@@ -68,6 +74,7 @@ public class Units : MonoBehaviour
     {
         //Reduce enemy Helth
         unitToAttack.Health -= AttackPower;
+        UnitsManager.Instance.InvokeActionHappned(name + " Is Attacking " + unitToAttack.name);
         UnitsManager.Instance.InvokeUnitAttack(this, unitToAttack);
     }
     void CheckIfItDestroyed()
@@ -75,9 +82,6 @@ public class Units : MonoBehaviour
         if (health <= 0)
         {
             UnitsManager.Instance.InvokeUnitDestroied(this);
-            RemoveFromList(this);
         }
     }
-    public virtual void RemoveFromList(Units destroyedUnit) { }
-
 }

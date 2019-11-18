@@ -9,8 +9,10 @@ public class UnitsManager : MonoBehaviour
     public static UnitsManager Instance;
     public static Action ReadyToMakeAction;
     public static Action UnitSelected;
+    public static Action<string> ActionHappned;
     public static Action<Units, Units> UnitAttack;
     public static Action<Units> UnitDetroyed;
+    public static Action<UnitType> GameOver;
 
 
     [HideInInspector]
@@ -121,7 +123,6 @@ public class UnitsManager : MonoBehaviour
         }
         piratesInRange.Clear();
     }
-
     public void InvokeReadyToAction()
     {
         if (ReadyToMakeAction != null)
@@ -133,11 +134,39 @@ public class UnitsManager : MonoBehaviour
     {
         if (UnitDetroyed != null)
             UnitDetroyed.Invoke(unit);
+
+        RemoveFromList(unit);
         Destroy(unit.gameObject);
     }
     public void InvokeUnitAttack(Units arg1,Units arg2)
     {
         if (UnitAttack != null)
             UnitAttack.Invoke(arg1,arg2);
+    }
+    public void InvokeActionHappned(string action) 
+    {
+        if (ActionHappned != null)
+            ActionHappned.Invoke(action);
+    }
+    void RemoveFromList(Units destroyedUnit)
+    {
+        if (destroyedUnit.type == UnitType.Pirate)
+            Pirates.Remove(destroyedUnit as PiratesUnits);
+        else
+            Players.Remove(destroyedUnit as PlayerUnits);
+
+        CheckIFGameOver(destroyedUnit.type);
+    }
+
+    void CheckIFGameOver(UnitType type)
+    {
+        if (Pirates.Count == 0 || Players.Count == 0)
+            InvokeGameOver(type);
+    }
+
+    void InvokeGameOver(UnitType type)
+    {
+        if (GameOver != null)
+            GameOver.Invoke(type);
     }
 }

@@ -7,14 +7,13 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance;
     [SerializeField]
     Animator PanelActionAnimator;
     [SerializeField]
     Text Message;
 
     [SerializeField]
-    GameObject ActionPanel;
+    GameObject SkipPanel;
 
     [SerializeField]
     GameObject GameOverPanel;
@@ -25,15 +24,13 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        if (Instance == null)
-            Instance = this;
         UnitsManager.ReadyToMakeAction += EnableActionPanel;
         UnitsManager.ActionHappned += Notification;
         UnitsManager.GameOver += GameOver;
     }
     public void DisableActionPanel()
     {
-        ActionPanel.SetActive(false);
+        SkipPanel.SetActive(false);
     }
     public void OnClickSkip()
     {
@@ -49,6 +46,7 @@ public class UIManager : MonoBehaviour
     {
         textToNotify = action;
         ShowPanel();
+        DisableActionPanel();
     }
     void GameOver(UnitType type)
     {
@@ -74,7 +72,7 @@ public class UIManager : MonoBehaviour
     }
     void EnableActionPanel()
     {
-        ActionPanel.SetActive(true);
+        SkipPanel.SetActive(true);
     }
     private void OnDestroy()
     {

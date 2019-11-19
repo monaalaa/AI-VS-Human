@@ -7,7 +7,6 @@ public class PiratesUnits : Units
     public GameObject AttackFlag;
     List<PlayerUnits> playersInRange = new List<PlayerUnits>();
     bool isMoving;
-    bool canAttack;
 
     PlayerUnits attackUnit;
     new void Start()
@@ -50,16 +49,15 @@ public class PiratesUnits : Units
                 {
                     Debug.Log(weakestPlayer.name + "Weakest Player");
                     destination = weakestPlayer.transform.position;
-                    Vector3 dir = GetDirection(destination);
+                    Vector3 dir = GetDirection(destination,transform.position);
                     Move(transform.position + 3 * dir);
                     canAttack = true;
                     attackUnit = weakestPlayer;
-                    Debug.Log("weakestPlayer");
                 }
                 else
                 {
                     Debug.Log("Run Away");
-                    //runaway
+                    RunAway();
                 }
             }
             else
@@ -70,6 +68,25 @@ public class PiratesUnits : Units
 
             }
         }
+    }
+    void RunAway()
+    {
+        float distance = 1000;
+        Vector3 positionToRunFrom = Vector3.zero;
+        //search for closest enemy
+        for (int i = 0; i < UnitsManager.Instance.Players.Count; i++)
+        {
+            float tempDis = Vector3.Distance(UnitsManager.Instance.Players[i].transform.position, transform.position);
+            if (tempDis < distance)
+            {
+                distance = tempDis;
+                positionToRunFrom = UnitsManager.Instance.Players[i].transform.position;
+            }
+        }
+
+        Vector3 dir = GetDirection(positionToRunFrom,transform.position);
+        Vector3 distnation = (-dir * Steps) + transform.position;
+        Move(distnation);
     }
     public void ShowAttackFlag()
     { AttackFlag.SetActive(true); }
@@ -94,9 +111,9 @@ public class PiratesUnits : Units
 
         return false;
     }
-    Vector3 GetDirection(Vector3 target)
+    Vector3 GetDirection(Vector3 target, Vector3 current)
     {
-        Vector3 dir = (target - transform.position).normalized;
+        Vector3 dir = (target - current).normalized;
         return dir;
     }
     void SearchForNearstEnemyOutOfAttackRange()
@@ -118,7 +135,7 @@ public class PiratesUnits : Units
             }
         }
         destination = targetPos;
-        Vector3 dir = GetDirection(targetPos) * Steps;
+        Vector3 dir = GetDirection(targetPos,transform.position) * Steps;
         destination = dir + transform.position;
         agent.SetDestination(destination);
         isMoving = true;

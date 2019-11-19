@@ -25,7 +25,7 @@ public class Units : MonoBehaviour
 
     protected Vector3 destination;
     protected bool moveToDistination = false;
-
+   protected bool canAttack;
     [SerializeField]
     private float health;
     [SerializeField]
@@ -63,7 +63,7 @@ public class Units : MonoBehaviour
     public virtual void Move(Vector3 location)
     {
         destination = location;
-        if (Vector3.Distance(destination, transform.position) < Steps)
+        if (Vector3.Distance(destination, transform.position) <= Steps)
         {
             agent.SetDestination(destination);
             UnitsManager.Instance.InvokeActionHappned(name + " Moves To New Location");

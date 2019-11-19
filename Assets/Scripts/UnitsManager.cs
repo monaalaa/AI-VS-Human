@@ -23,7 +23,7 @@ public class UnitsManager : MonoBehaviour
 
     int CurrentUnitIndex = 0;
     bool playerTurn = true;
-
+   
     List<PiratesUnits> piratesInRange = new List<PiratesUnits>();
 
     private void Awake()
@@ -37,22 +37,8 @@ public class UnitsManager : MonoBehaviour
     }
     public void TurnBase()
     {
-        if (Selectedplayer != null)
-            UnSelectUnit();
-
-        if (playerTurn)
-        {
-            GoToNextUnit(Players.Count, Players.Cast<Units>().ToList(), false);
-            if(Selectedplayer.GetComponent<PlayerUnits>()!=null)
-            Selectedplayer.GetComponent<PlayerUnits>().canMove = true;
-        }
-        else
-        {
-            GoToNextUnit(Pirates.Count, Pirates.Cast<Units>().ToList(), true);
-        }
-
-        HideFlags();
-        UIManager.Instance.DisableActionPanel();
+        if (Pirates.Count > 0 && Players.Count > 0)
+            StartCoroutine(ETurnBase());
     }
     private void GoToNextUnit(int count, List<Units> units, bool isPlayerTurn)
     {
@@ -119,6 +105,7 @@ public class UnitsManager : MonoBehaviour
     {
         for (int i = 0; i < piratesInRange.Count; i++)
         {
+            if(piratesInRange[i]!=null)
             piratesInRange[i].HideAttackFlag();
         }
         piratesInRange.Clear();
@@ -168,5 +155,26 @@ public class UnitsManager : MonoBehaviour
     {
         if (GameOver != null)
             GameOver.Invoke(type);
+    }
+
+    IEnumerator ETurnBase()
+    {
+        yield return new WaitForSeconds(0.8f);
+       
+        if (Selectedplayer != null)
+            UnSelectUnit();
+
+        if (playerTurn)
+        {
+            GoToNextUnit(Players.Count, Players.Cast<Units>().ToList(), false);
+            if (Selectedplayer.GetComponent<PlayerUnits>() != null)
+                Selectedplayer.GetComponent<PlayerUnits>().canMove = true;
+        }
+        else
+        {
+            GoToNextUnit(Pirates.Count, Pirates.Cast<Units>().ToList(), true);
+        }
+
+        HideFlags();
     }
 }

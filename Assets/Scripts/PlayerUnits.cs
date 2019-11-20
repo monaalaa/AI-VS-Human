@@ -8,8 +8,11 @@ public class PlayerUnits : Units
     public LayerMask MovmentMask;
     public GameObject Range;
 
-    PiratesUnits pirate;
     internal bool canMove = false;
+
+    PiratesUnits pirate;
+    List<PiratesUnits> piratesInRange = new List<PiratesUnits>();
+
     new void Start()
     {
         base.Start(); 
@@ -50,7 +53,7 @@ public class PlayerUnits : Units
                 moveToDistination = false;
                 canMove = false;
                 canAttack = true;
-                UnitsManager.Instance.WhenPlayerReachedDistnation();
+                OnDistnationReached();
             }
         }
     }
@@ -66,6 +69,35 @@ public class PlayerUnits : Units
             canAttack = false;
             pirate = null;
         }
+    }
+
+    public bool SearchForPirates()
+    {
+        piratesInRange.Clear();
+        Collider[] colliders;
+        colliders = Physics.OverlapSphere(transform.position, AttackRange, 1);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            piratesInRange.Add(colliders[i].gameObject.GetComponent<PiratesUnits>());
+            piratesInRange[i].ShowAttackFlag();
+        }
+
+        if (piratesInRange.Count > 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void OnDistnationReached()
+    {
+        if (SearchForPirates())
+        {
+           UnitsManager.Instance.InvokeReadyToAction();
+        }
+        else
+            UnitsManager.Instance.TurnBase();
     }
 
 }

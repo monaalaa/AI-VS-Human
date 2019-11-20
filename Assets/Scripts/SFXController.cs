@@ -5,31 +5,24 @@ using UnityEngine;
 public class SFXController : MonoBehaviour
 {
     [SerializeField]
-    AudioClip AttackSound;
-
-    [SerializeField]
-    AudioClip DethSound;
-    [SerializeField]
     AudioSource audioSource;
 
     private void Start()
     {
-        UnitsManager.UnitDetroyed += ShowDestroyParticle;
-        UnitsManager.UnitAttack += ShowUnitAttackParticle;
+        UnitsManager.UnitDetroyed += PlayDethSound;
+        UnitsManager.UnitAttack += PlayAttackSound;
     }
-    private void ShowUnitAttackParticle(Units a, Units b)
+    private void PlayAttackSound(Units a, Units b)
     {
-        audioSource.clip = AttackSound;
         audioSource.Play();
     }
-    private void ShowDestroyParticle(Units obj)
+    private void PlayDethSound(Units obj)
     {
-        audioSource.clip = DethSound;
         audioSource.Play();
     }
     private void OnDestroy()
     {
-        UnitsManager.UnitDetroyed -= ShowDestroyParticle;
-        UnitsManager.UnitAttack -= ShowUnitAttackParticle;
+        UnitsManager.UnitDetroyed -= PlayDethSound;
+        UnitsManager.UnitAttack -= PlayAttackSound;
     }
 }

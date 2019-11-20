@@ -47,7 +47,6 @@ public class PiratesUnits : Units
                 //Check if am safe (get the weakest and attack ) else ( runaway )
                 if (playersInRangePower < Health || weakestPlayer.Health <= AttackPower)
                 {
-                    Debug.Log(weakestPlayer.name + "Weakest Player");
                     destination = weakestPlayer.transform.position;
                     Vector3 dir = GetDirection(destination,transform.position);
                     Move(transform.position + 3 * dir);
@@ -56,7 +55,6 @@ public class PiratesUnits : Units
                 }
                 else
                 {
-                    Debug.Log("Run Away");
                     RunAway();
                 }
             }
@@ -64,8 +62,6 @@ public class PiratesUnits : Units
             {
                 //else => get all players and search for the nearst and go in it's direction
                 SearchForNearstEnemyOutOfAttackRange();
-                Debug.Log("SearchForNearstEnemyOutOfAttackRange");
-
             }
         }
     }
@@ -83,10 +79,7 @@ public class PiratesUnits : Units
                 positionToRunFrom = UnitsManager.Instance.Players[i].transform.position;
             }
         }
-
-        Vector3 dir = GetDirection(positionToRunFrom,transform.position);
-        Vector3 distnation = (-dir * Steps) + transform.position;
-        Move(distnation);
+        MoveInDirection(positionToRunFrom, -1);
     }
     public void ShowAttackFlag()
     { AttackFlag.SetActive(true); }
@@ -135,10 +128,14 @@ public class PiratesUnits : Units
             }
         }
         destination = targetPos;
-        Vector3 dir = GetDirection(targetPos,transform.position) * Steps;
-        destination = dir + transform.position;
-        agent.SetDestination(destination);
+        MoveInDirection(targetPos, 1);
         isMoving = true;
+    }
+    private void MoveInDirection(Vector3 targetPos,int dir)
+    {
+        Vector3 dirVal = GetDirection(targetPos, transform.position);
+        destination = (dirVal * Steps * dir) + transform.position;
+        agent.SetDestination(destination);
         UnitsManager.Instance.InvokeActionHappned(name + " Moves To New Location");
         moveToDistination = true;
     }

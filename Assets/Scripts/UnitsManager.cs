@@ -23,8 +23,6 @@ public class UnitsManager : MonoBehaviour
 
     int CurrentUnitIndex = 0;
     bool playerTurn = true;
-   
-    List<PiratesUnits> piratesInRange = new List<PiratesUnits>();
 
     private void Awake()
     {
@@ -37,6 +35,7 @@ public class UnitsManager : MonoBehaviour
     }
     public void TurnBase()
     {
+        HideFlags();
         if (Pirates.Count > 0 && Players.Count > 0)
             StartCoroutine(ETurnBase());
     }
@@ -73,43 +72,6 @@ public class UnitsManager : MonoBehaviour
         if (temp != null)
             temp.Range.SetActive(false);
     }
-    public bool SearchForPirates()
-    {
-        Collider[] colliders;
-        colliders = Physics.OverlapSphere(Selectedplayer.transform.position, Selectedplayer.AttackRange, 1);
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            piratesInRange.Add(colliders[i].gameObject.GetComponent<PiratesUnits>());
-            piratesInRange[i].ShowAttackFlag();
-        }
-
-        if (piratesInRange.Count > 0)
-        {
-            return true;
-        }
-
-        return false;
-    }
-    //Note: De mesh elmfrod tkon hena 3lshan hya 7aga khasa b elplayer bs lkn el pirate mesh by3ml keda
-    public void WhenPlayerReachedDistnation()
-    {
-        if (SearchForPirates())
-        {
-            InvokeReadyToAction();
-        }
-        else
-            TurnBase();
-    }
-
-    public void HideFlags()
-    {
-        for (int i = 0; i < piratesInRange.Count; i++)
-        {
-            if(piratesInRange[i]!=null)
-            piratesInRange[i].HideAttackFlag();
-        }
-        piratesInRange.Clear();
-    }
     public void InvokeReadyToAction()
     {
         if (ReadyToMakeAction != null)
@@ -144,19 +106,16 @@ public class UnitsManager : MonoBehaviour
 
         CheckIFGameOver(destroyedUnit.type);
     }
-
     void CheckIFGameOver(UnitType type)
     {
         if (Pirates.Count == 0 || Players.Count == 0)
             InvokeGameOver(type);
     }
-
     void InvokeGameOver(UnitType type)
     {
         if (GameOver != null)
             GameOver.Invoke(type);
     }
-
     IEnumerator ETurnBase()
     {
         yield return new WaitForSeconds(0.8f);
@@ -171,13 +130,24 @@ public class UnitsManager : MonoBehaviour
         {
             GoToNextUnit(Players.Count, Players.Cast<Units>().ToList(), false);
             if (Selectedplayer.GetComponent<PlayerUnits>() != null)
-                Selectedplayer.GetComponent<PlayerUnits>().canMove = true;
+            {
+                PlayerUnits temp = Selectedplayer.GetComponent<PlayerUnits>();
+                temp.canMove = true;
+            }
         }
         else
         {
             GoToNextUnit(Pirates.Count, Pirates.Cast<Units>().ToList(), true);
         }
 
-        HideFlags();
+        
+    }
+    public void HideFlags()
+    {
+        for (int i = 0; i < Pirates.Count; i++)
+        {
+            if (Pirates[i] != null)
+                Pirates[i].HideAttackFlag();
+        }
     }
 }

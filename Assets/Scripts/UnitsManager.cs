@@ -160,9 +160,12 @@ public class UnitsManager : MonoBehaviour
     IEnumerator ETurnBase()
     {
         yield return new WaitForSeconds(0.8f);
-       
+
         if (Selectedplayer != null)
+        {
             UnSelectUnit();
+            Selectedplayer.canAttack = false;
+        }
 
         if (playerTurn)
         {

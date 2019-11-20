@@ -15,6 +15,8 @@ public class Units : MonoBehaviour
 	public int AttackPower;
     public int AttackRange;
     public float Steps;
+    [HideInInspector]
+    public bool canAttack;
 
     [SerializeField]
     Image HealthBar;
@@ -25,7 +27,7 @@ public class Units : MonoBehaviour
 
     protected Vector3 destination;
     protected bool moveToDistination = false;
-   protected bool canAttack;
+   
     [SerializeField]
     private float health;
     [SerializeField]

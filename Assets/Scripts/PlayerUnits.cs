@@ -34,7 +34,7 @@ public class PlayerUnits : Units
                 else //ForAttack
                 {
                     pirate = hit.collider.gameObject.GetComponent<PiratesUnits>();
-                    if (pirate != null )
+                    if (pirate != null && canAttack)
                     {
                         Attack(pirate);
                     }
@@ -49,6 +49,7 @@ public class PlayerUnits : Units
             {
                 moveToDistination = false;
                 canMove = false;
+                canAttack = true;
                 UnitsManager.Instance.WhenPlayerReachedDistnation();
             }
         }
@@ -66,7 +67,6 @@ public class PlayerUnits : Units
             pirate = null;
         }
     }
-
 
 }
 

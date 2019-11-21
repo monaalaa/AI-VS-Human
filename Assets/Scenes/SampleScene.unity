@@ -2206,7 +2206,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &808610908
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2303,6 +2303,7 @@ MonoBehaviour:
   tutorialSprites:
   - {fileID: 21300000, guid: ebbadd502220d7d48897bf384b3e2103, type: 3}
   - {fileID: 21300000, guid: 45141b45eb83ce84f8cff6f7fad2e451, type: 3}
+  - {fileID: 21300000, guid: 5d0fa393a7dda594c83a00fd16dc39c9, type: 3}
   sprite: {fileID: 112774470}
 --- !u!1 &811460669
 GameObject:
@@ -5449,7 +5450,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1993931445
 RectTransform:
   m_ObjectHideFlags: 0
